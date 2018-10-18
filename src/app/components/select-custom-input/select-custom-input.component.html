@@ -1,3 +1,17 @@
-<p>
-  select-custom-input works!
-</p>
+<mat-form-field floatLabel="always">
+  <mat-label>Value(s)</mat-label>
+  <mat-select *ngIf="!custom" 
+    placeholder="Select value(s)" 
+    [formControl]="selectControl" #selectWidget
+  >
+    <mat-option *ngFor="let value of selectList" [value]="value">{{value}}</mat-option>
+    <mat-option [value]="'custom'">Custom...</mat-option>
+  </mat-select>
+  <input *ngIf="custom" 
+    matInput appAutoFocus 
+    [formControl]="inputControl"
+    (focusout)="onFocusOut(inputWidget.value)"
+    [value] = "selectedValue"
+    #inputWidget 
+  >
+</mat-form-field>
