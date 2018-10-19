@@ -1,0 +1,25 @@
+<form [formGroup]="generalForm" class="container container-column">
+  <div class="container container-row">
+    <h2 class="item">Component</h2>
+    <h2 class="item">Initial Value</h2>
+    <h2 class="item">Value Emitted</h2>
+    <h2 class="item">Value Controlled</h2>
+    <h2 class="item">Status</h2>
+  </div>
+  <div class="container container-row">
+    <app-select-custom-input 
+      class="item value" placeholder="Select value" title="Select custom input" 
+      [selectedValue]="initialValue" (valueChange)="onChange($event)" [selectList]="selectList"
+      [formControl]="selectCustomInputControl" required
+    >
+    </app-select-custom-input>
+    <span class="item value">{{initialValue}}</span>
+    <span class="item value">{{valueEmitted || '---'}}</span>
+    <span class="item value">{{selectCustomInputControl.value || '---'}}</span>
+    <span class="item value" >
+      <mat-icon *ngIf="selectCustomInputControl.valid" color="primary">check</mat-icon>
+      <mat-icon *ngIf="selectCustomInputControl.error" color="warn">error</mat-icon>
+      <span *ngIf="!selectCustomInputControl.error && !selectCustomInputControl.valid">---</span>
+    </span>
+  </div>
+</form>

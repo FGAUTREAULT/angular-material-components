@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
 import { SelectCustomTriggerComponent } from './select-custom-trigger/select-custom-trigger.component';
 import { AutofocusDirective } from '../directive/auto-focus.directive';
+import { FormComponent } from './form/form.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { AutofocusDirective } from '../directive/auto-focus.directive';
   declarations: [
     SelectCustomInputComponent,
     SelectCustomTriggerComponent,
-    AutofocusDirective
+    AutofocusDirective,
+    FormComponent
   ],
   entryComponents: [
   ]
