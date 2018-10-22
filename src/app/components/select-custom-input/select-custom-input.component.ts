@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, Output, OnChanges, ViewChild, ElementRef, Renderer2, Renderer } from '@angular/core';
+import { Component, OnInit, Input, Output, OnChanges, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-select-custom-input',
@@ -14,8 +15,9 @@ import { EventEmitter } from '@angular/core';
     multi: true
   }]
 })
-export class SelectCustomInputComponent implements OnInit, OnChanges {
+export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges, ControlValueAccessor {
 
+  /* Inputs/Outputs */
   @Input()
   selectList: string[];
   @Input()
@@ -27,77 +29,105 @@ export class SelectCustomInputComponent implements OnInit, OnChanges {
   @Output()
   valueChange = new EventEmitter();
 
+  /* Widgets */
   @ViewChild('inputWidget') inputWidget: ElementRef;
   @ViewChild('selectWidget') selectWidget: ElementRef;
 
-  onChange;
+  /* ControlValueAccessor */
+  onChange: (change) => {};
+  onTouched: (change) => {};
 
+  /* Controls */
   selectControl = new FormControl();
   inputControl = new FormControl();
 
+  /* State */
   custom: boolean;
   isDisabled: boolean;
 
-  constructor(
-    private renderer: Renderer
-  ) { }
+  /* Subscriptions */
+  selectSubscription: Subscription;
+  inputSubscription: Subscription;
 
+  /* Utils */
+  static isCustomValue(value: string, list: string[]): boolean {
+    return value ? list.indexOf(value) === -1 : false;
+  }
+
+  constructor() { }
+
+  /**
+   * Init component with subscription
+   */
   ngOnInit() {
 
-    if (!this.selectList) {
-      this.custom = false;
-      this.title = 'Value';
-      this.placeholder = 'Select value';
-      this.selectedValue = '3';
-      this.selectList = ['AAAAA', 'BBBBB', 'CCCCC', 'DDDDD', 'EEEEE'];
-      this.writeValue(this.selectedValue);
-    }
+    this.devInit();
 
-    this.selectControl.valueChanges.subscribe((value) => {
-      this.custom = this.isCustomValue(value);
+    this.selectSubscription = this.selectControl.valueChanges.subscribe((value) => {
+      this.custom = SelectCustomInputComponent.isCustomValue(value, this.selectList);
       this.selectedValue = !this.custom ? value : '';
       this.emitChanges(this.selectedValue);
     });
 
-    this.inputControl.valueChanges.subscribe((value) => {
+    this.inputSubscription = this.inputControl.valueChanges.subscribe((value) => {
       this.emitChanges(value);
     });
   }
 
+  /**
+   * Destroy subscriptions
+   */
+  ngOnDestroy() {
+    this.selectSubscription.unsubscribe();
+    this.inputSubscription.unsubscribe();
+  }
+
+  /**
+   * React to value change
+   * @param changes
+   */
   ngOnChanges(changes) {
     if (changes.selectedValue) {
       this.writeValue(changes.selectedValue.currentValue);
     }
   }
 
-  emitChanges(value) {
+  /**
+   * Emit outpur changes
+   * @param value
+   */
+  emitChanges(value: string) {
     this.valueChange.emit(value);
     if (this.onChange) {
       this.onChange(value);
     }
   }
 
-  private isCustomValue(value: string): boolean {
-    return value ? this.selectList.indexOf(value) === -1 : false;
-  }
-
-  onFocusOut(value) {
-    this.custom = value !== '';
+  /**
+   * Correct value on focus out, considering empty and list values not to be custom ones
+   * @param value
+   */
+  onFocusOut(value: string) {
+    this.custom = value !== '' && SelectCustomInputComponent.isCustomValue(value, this.selectList);
     if (!this.custom) {
       this.selectControl.patchValue(value);
     }
   }
 
+  /* ControlValueAccessor */
+
   writeValue(value: any): void {
     this.selectedValue = value;
-    this.custom = this.isCustomValue(this.selectedValue);
+    this.custom = SelectCustomInputComponent.isCustomValue(this.selectedValue, this.selectList);
   }
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void { }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 
   setDisabledState?(isDisabled: boolean): void {
     // if (isDisabled) {
@@ -107,6 +137,16 @@ export class SelectCustomInputComponent implements OnInit, OnChanges {
     //   this.inputControl.enable();
     //   this.selectControl.enable();
     // }
+  }
+
+  /* For development purpose */
+  private devInit() {
+    // this.custom = false;
+    // this.title = 'Value';
+    // this.placeholder = 'Select value';
+    // this.selectedValue = '3';
+    // this.selectList = ['AAAAA', 'BBBBB', 'CCCCC', 'DDDDD', 'EEEEE'];
+    // this.writeValue(this.selectedValue);
   }
 
 }

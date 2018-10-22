@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer } from '@angular/core';
 import { selectList } from 'src/app/core/model/mock.model';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 

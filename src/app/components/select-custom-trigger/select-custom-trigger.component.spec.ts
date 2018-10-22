@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectCustomTriggerComponent } from './select-custom-trigger.component';
+import { ComponentsModule } from '../components.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SelectCustomTriggerComponent', () => {
   let component: SelectCustomTriggerComponent;
@@ -8,7 +10,11 @@ describe('SelectCustomTriggerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectCustomTriggerComponent ]
+      declarations: [ ],
+      imports: [
+        ComponentsModule,
+        BrowserAnimationsModule
+      ]
     })
     .compileComponents();
   }));

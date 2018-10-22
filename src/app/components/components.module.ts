@@ -3,11 +3,47 @@ import { CommonModule } from '@angular/common';
 import { SelectCustomInputComponent } from './select-custom-input/select-custom-input.component';
 import { RouterModule } from '@angular/router';
 import { ComponentsRoutingModule } from './component-routing.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
+// tslint:disable-next-line:max-line-length
+import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule, MatFormFieldModule, MatChipsModule, MatRippleModule, MatMenuModule, MatButtonToggleModule, MatProgressSpinnerModule, MatSidenavModule, MatCardModule, MatListModule, MatCheckboxModule, MatTabsModule, MatDialogModule, MatTooltipModule, MatDatepickerModule, MatSnackBarModule, MatAutocompleteModule, MatOptionModule, MatRadioModule, MatExpansionModule, MatSlideToggleModule, MatTableModule, MatPaginatorModule, MatSortModule, MatToolbarModule } from '@angular/material';
 import { SelectCustomTriggerComponent } from './select-custom-trigger/select-custom-trigger.component';
 import { AutofocusDirective } from '../directive/auto-focus.directive';
 import { FormComponent } from './form/form.component';
+import { CdkTableModule } from '@angular/cdk/table';
+
+
+const materialModules = [
+  MatSelectModule,
+  MatChipsModule,
+  MatButtonModule,
+  MatIconModule,
+  MatRippleModule,
+  MatMenuModule,
+  MatButtonToggleModule,
+  MatProgressSpinnerModule,
+  MatInputModule,
+  MatSidenavModule,
+  MatCardModule,
+  MatListModule,
+  MatCheckboxModule,
+  MatTabsModule,
+  MatDialogModule,
+  MatTooltipModule,
+  MatDatepickerModule,
+  MatSnackBarModule,
+  MatAutocompleteModule,
+  MatOptionModule,
+  MatExpansionModule,
+  MatRadioModule,
+  MatSlideToggleModule,
+  MatTableModule,
+  CdkTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatFormFieldModule,
+  MatToolbarModule
+];
+
 
 @NgModule({
   imports: [
@@ -15,11 +51,14 @@ import { FormComponent } from './form/form.component';
     RouterModule,
     ComponentsRoutingModule,
     ReactiveFormsModule,
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatIconModule,
+    ...materialModules
+  ],
+  exports: [
+    CommonModule,
+    RouterModule,
+    ComponentsRoutingModule,
+    ReactiveFormsModule,
+    ...materialModules
   ],
   declarations: [
     SelectCustomInputComponent,
@@ -27,8 +66,7 @@ import { FormComponent } from './form/form.component';
     AutofocusDirective,
     FormComponent
   ],
-  entryComponents: [
-  ]
+  entryComponents: [],
 })
 export class ComponentsModule {
 
