@@ -5,7 +5,7 @@
     [formControl]="selectControl" 
     #selectWidget
   >
-    <mat-option *ngFor="let value of selectList" [value]="value">{{value}}</mat-option>
+    <mat-option *ngFor="let param of selectList" [value]="param.value.toString()">{{param.translationKey | translate}}</mat-option>
     <mat-option [value]="'custom'">Custom...</mat-option>
   </mat-select>
   <input *ngIf="custom" 

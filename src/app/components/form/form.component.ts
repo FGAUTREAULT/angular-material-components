@@ -1,6 +1,7 @@
-import { Component, OnInit, Renderer } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { selectList } from 'src/app/core/model/mock.model';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { SelectParams } from '../select-custom-input/select-custom-input.component';
 
 @Component({
   selector: 'app-form',
@@ -9,7 +10,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 })
 export class FormComponent implements OnInit {
 
-  selectList: string[] = selectList;
+  selectList: SelectParams[] = selectList;
   initialValue;
   valueEmitted;
   valueControlled;
@@ -18,8 +19,7 @@ export class FormComponent implements OnInit {
   generalForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private renderer: Renderer
+    private fb: FormBuilder
   ) {
     this.generalForm = this.fb.group({
       selectCustomInputControl: this.selectCustomInputControl
@@ -27,7 +27,7 @@ export class FormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initialValue = '3';
+    this.initialValue = '30';
     this.selectCustomInputControl.setValue(this.initialValue);
     // this.selectCustomInputControl.disable();
   }

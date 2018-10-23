@@ -10,6 +10,7 @@ import { SelectCustomTriggerComponent } from './select-custom-trigger/select-cus
 import { AutofocusDirective } from '../directive/auto-focus.directive';
 import { FormComponent } from './form/form.component';
 import { CdkTableModule } from '@angular/cdk/table';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 const materialModules = [
@@ -51,6 +52,7 @@ const materialModules = [
     RouterModule,
     ComponentsRoutingModule,
     ReactiveFormsModule,
+    TranslateModule,
     ...materialModules
   ],
   exports: [

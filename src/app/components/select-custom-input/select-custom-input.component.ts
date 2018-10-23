@@ -1,8 +1,15 @@
-import { Component, OnInit, Input, Output, OnChanges, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, OnChanges, ViewChild, ElementRef, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { selectList } from 'src/app/core/model/mock.model';
+
+export interface SelectParams {
+  key: string;
+  value: any;
+  translationKey: string;
+}
 
 @Component({
   selector: 'app-select-custom-input',
@@ -19,9 +26,9 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
 
   /* Inputs/Outputs */
   @Input()
-  selectList: string[];
+  selectList: SelectParams[];
   @Input()
-  selectedValue: string;
+  selectedValue: any;
   @Input()
   title: string;
   @Input()
@@ -50,11 +57,15 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
   inputSubscription: Subscription;
 
   /* Utils */
-  static isCustomValue(value: string, list: string[]): boolean {
-    return value ? list.indexOf(value) === -1 : false;
+  static isCustomValue(value: string, list: SelectParams[]): boolean {
+    return value ? list.findIndex((param) => param.value.toString() === value.toString()) === -1 : false;
   }
 
-  constructor() { }
+  static getSelectValue(value: string, list: SelectParams[]): any {
+    return value ? list.find((param) => param.value.toString() === value.toString()) : '';
+  }
+
+  constructor(private ref: ChangeDetectorRef) { }
 
   /**
    * Init component with subscription
@@ -87,8 +98,9 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
    * @param changes
    */
   ngOnChanges(changes) {
+    console.log('changes');
     if (changes.selectedValue) {
-      this.writeValue(changes.selectedValue.currentValue);
+      this.writeValue(changes.selectedValue.currentValue.toString());
     }
   }
 
@@ -107,18 +119,19 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
    * Correct value on focus out, considering empty and list values not to be custom ones
    * @param value
    */
-  onFocusOut(value: string) {
-    this.custom = value !== '' && SelectCustomInputComponent.isCustomValue(value, this.selectList);
-    if (!this.custom) {
-      this.selectControl.patchValue(value);
-    }
+  onFocusOut(value: any) {
+    this.writeValue(value);
   }
 
   /* ControlValueAccessor */
 
   writeValue(value: any): void {
-    this.selectedValue = value;
+    this.selectedValue = value.toString();
     this.custom = SelectCustomInputComponent.isCustomValue(this.selectedValue, this.selectList);
+    if (!this.custom) {
+      this.selectControl.setValue(value.toString());
+    }
+    this.ref.markForCheck();
   }
 
   registerOnChange(fn: any): void {
@@ -144,8 +157,8 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
     // this.custom = false;
     // this.title = 'Value';
     // this.placeholder = 'Select value';
-    // this.selectedValue = '3';
-    // this.selectList = ['AAAAA', 'BBBBB', 'CCCCC', 'DDDDD', 'EEEEE'];
+    // this.selectedValue = 10;
+    // this.selectList = selectList;
     // this.writeValue(this.selectedValue);
   }
 
