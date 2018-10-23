@@ -71,7 +71,6 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
    * Init component with subscription
    */
   ngOnInit() {
-
     this.devInit();
 
     this.selectSubscription = this.selectControl.valueChanges.subscribe((value) => {
@@ -98,7 +97,6 @@ export class SelectCustomInputComponent implements OnInit, OnDestroy, OnChanges,
    * @param changes
    */
   ngOnChanges(changes) {
-    console.log('changes');
     if (changes.selectedValue) {
       this.writeValue(changes.selectedValue.currentValue.toString());
     }

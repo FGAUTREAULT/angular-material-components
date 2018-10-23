@@ -3,17 +3,39 @@ import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testi
 import { SelectCustomInputComponent } from './select-custom-input.component';
 import { ComponentsModule } from '../components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 
 describe('SelectCustomInputComponent', () => {
   let component: SelectCustomInputComponent;
   let fixture: ComponentFixture<SelectCustomInputComponent>;
 
+  const modelMock = [{
+    key: 'AAAAA',
+    value: 1,
+    translationKey: 'LEVEL.LOW'
+  },
+  {
+    key: 'BBBBB',
+    value: 2,
+    translationKey: 'LEVEL.MEDIUM'
+  },
+  {
+    key: 'CCCCC',
+    value: 3,
+    translationKey: 'LEVEL.HIGH'
+  }];
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [],
+      declarations: [SelectCustomInputComponent],
       imports: [
-        ComponentsModule,
-        BrowserAnimationsModule
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        BrowserAnimationsModule,
+        TranslateModule.forRoot()
       ]
     })
       .compileComponents();
@@ -58,7 +80,7 @@ describe('SelectCustomInputComponent', () => {
 
       const value = '3';
       component.selectedValue = value;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       // WHEN
       component.ngOnInit();
@@ -95,7 +117,7 @@ describe('SelectCustomInputComponent', () => {
 
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       spyOn(component, 'writeValue');
       const value = '4';
@@ -123,7 +145,7 @@ describe('SelectCustomInputComponent', () => {
 
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       spyOn(component, 'writeValue');
       const value = '4';
@@ -153,7 +175,7 @@ describe('SelectCustomInputComponent', () => {
 
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       spyOn(component.valueChange, 'emit');
       const value = '4';
@@ -169,7 +191,7 @@ describe('SelectCustomInputComponent', () => {
   describe('isCustomValue', () => {
     it('Component custom value - value null', fakeAsync(() => {
       // GIVEN
-      const list = ['1', '2', '3'];
+      const list = modelMock;
       const value = null;
 
       // WHEN
@@ -181,7 +203,7 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component custom value - value undefined', fakeAsync(() => {
       // GIVEN
-      const list = ['1', '2', '3'];
+      const list = modelMock;
       const value = undefined;
 
       // WHEN
@@ -193,7 +215,7 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component custom value - value \'\' ', fakeAsync(() => {
       // GIVEN
-      const list = ['1', '2', '3'];
+      const list = modelMock;
       const value = '';
 
       // WHEN
@@ -205,7 +227,7 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component custom value - value in list', fakeAsync(() => {
       // GIVEN
-      const list = ['1', '2', '3'];
+      const list = modelMock;
       const value = '3';
 
       // WHEN
@@ -217,7 +239,7 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component custom value - value out of list', fakeAsync(() => {
       // GIVEN
-      const list = ['1', '2', '3'];
+      const list = modelMock;
       const value = '4';
 
       // WHEN
@@ -240,7 +262,7 @@ describe('SelectCustomInputComponent', () => {
 
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '4';
 
@@ -266,7 +288,7 @@ describe('SelectCustomInputComponent', () => {
       spyOn(component.valueChange, 'emit');
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '2';
 
@@ -292,7 +314,7 @@ describe('SelectCustomInputComponent', () => {
       spyOn(component.valueChange, 'emit');
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '';
 
@@ -316,7 +338,7 @@ describe('SelectCustomInputComponent', () => {
 
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '4';
 
@@ -330,16 +352,9 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component write value - NOT custom', fakeAsync(() => {
       // GIVEN
-      component.selectControl.valueChanges.subscribe(() => {
-        fail();
-      });
-      component.inputControl.valueChanges.subscribe(() => {
-        fail();
-      });
-
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '3';
 
@@ -353,16 +368,9 @@ describe('SelectCustomInputComponent', () => {
 
     it('Component write value - empty', fakeAsync(() => {
       // GIVEN
-      component.selectControl.valueChanges.subscribe(() => {
-        fail();
-      });
-      component.inputControl.valueChanges.subscribe(() => {
-        fail();
-      });
-
       const currentValue = '3';
       component.selectedValue = currentValue;
-      component.selectList = ['1', '2', '3'];
+      component.selectList = modelMock;
 
       const value = '';
 
